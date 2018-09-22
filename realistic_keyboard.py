@@ -2,12 +2,13 @@ import pyautogui
 import random
 import string
 import time
+
 from config import SMALL_DELAY_RANGE
 from config import REACTION_DELAY
 from config import SPELLING_MISTAKE_RATIO
 
 
-def typeerror():
+def typeerror(type=None):
     """ Creates random typeerrors only containing ascii letters both cases, and fixes them afterwards """
     n = random.randint(1, 4)
 
@@ -56,5 +57,5 @@ def press(key):
 
 
 if __name__ == "__main__":
-    typeerror()
+    pass
 

@@ -9,17 +9,19 @@ GET_HISTORIC_VALUE_URL = "/api/graph/{0}.json"
 
 
 def build_api_call(FUNCTION_URL, itemID, **kwargs):
+    """ Builds an api call from static URL's"""
     url = BASE_URL + FUNCTION_URL.format(itemID, kwargs)
     return url
 
 
 def json_api_call(url):
+    """ Send request to url """
     response = requests.get(url)
     return response.json()
 
 
 def harvest(function, itemID, **kwargs):
-
+    """ Takes in an action and an item, returns the appropriate json item data """
     try:
         payload = build_api_call(itemID, function, kwargs)
         response = json_api_call(payload)
@@ -59,21 +61,31 @@ def getcatagory(itemID, page=1):
     return harvest(GET_CATAGORY_URL, itemID, page)
 
 
-def price_from_json(json):
+def get_price_from_json(json):
+    """ Returns the price nested in the json data as an integer """
     try:
-        return json['current']['price']
+        return int(json['current']['price'])
     except ValueError as e:
         return "NaN"
+
+
+def get_image_from_json(json):
+    """ Returns the image url nested in the json data"""
+    pass
+
+
+def item_name_to_id(item_name):
+    """ Does a lookup in the item file, returning the appropriate ID for the given item"""
+    pass
 
 
 def create_example():
     """ Writes example json to "exchange_api_example.json """
 
     with open('exchange_api_example.json', 'w') as f:
-        json.dump(harvest(2), f)
+        json.dump(getitem(2), f)
 
 
 if __name__ == "__main__":
     """ Run Unit Test"""
-
-    print(getitem(7))
+    pass
