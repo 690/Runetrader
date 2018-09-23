@@ -3,7 +3,7 @@ import time
 import pyautogui
 
 from config import SMALL_DELAY_RANGE
-from utils import random_position
+from tools.utils import random_position
 
 
 def random_path(x1, y1, x2, y2):
@@ -18,7 +18,7 @@ def click(x, y):
     """ Click a point with a random delay """
 
     time.sleep(random.uniform(*SMALL_DELAY_RANGE))
-    pyautogui.click(x, y,)
+    pyautogui.click(x, y)
 
 
 def move(target_x, target_y, **kwargs):

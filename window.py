@@ -1,36 +1,25 @@
 import pyautogui
-import realistic_mouse as mouse
-import realistic_keyboard as keyboard
+from tools import realistic_keyboard as keyboard, realistic_mouse as mouse
+from classes import GE
 import os
 import random
 import time
-import item_database
 from config import MEDIUM_DELAY_RANGE
 
 
+def get_ge_slots():
+    """ Finds all instances of empty Grand exchange slots, and returns a list of GE_SLOT objects """
 
-def get_available_slots():
-    """ Returns a list of free Grand exchange slots """
-
-    return list(pyautogui.locateAllOnScreen("resources/ge/buy_button.png"))
-
-
-def get_occupied_slots():
-    """ Returns a list of Grand exchange slots that have ongoing orders """
-
-    return list(pyautogui.locateAllOnScreen("resources/ge/occupied_slot.png"))
+    GE_SLOTS = pyautogui.locateAllOnScreen("resources/ge/slot.png")
+    return [GE.GE_SLOT(coordinates) for coordinates in [*GE_SLOTS]]
 
 
-def get_aborted_orders():
-    """ Returns a list of Grand exchange slots that have aborted orders """
-
-    return list(pyautogui.locateAllOnScreen("resources/ge/aborted_order.png"))
+def get_buy_slot(region):
+    return pyautogui.locateOnScreen('resources/ge/buy_button.png', region=region)
 
 
-def get_completed_orders():
-    """ Returns a list of Grand exchange slots that have completed orders"""
-
-    return list(pyautogui.locateAllOnScreen("resources/ge/completed_order.png"))
+def get_sell_slot(region):
+    return pyautogui.locateOnScreen('resources/ge/sell_button.png', region=region)
 
 
 def collect_orders():
@@ -77,7 +66,7 @@ def retrieve_item(itemID):
 
     for i in range(2):
         try:
-            x, y, z, w = list(pyautogui.locateAllOnScreen('resources/items/{0}.png'.format(itemID)))[0]
+            x, y, z, w = list(pyautogui.locateAllOnScreen('resources/ge_inventory/{0}.png'.format(itemID)))[0]
 
         except TypeError as e:
             print("Cannot find item in Grand exchange")
@@ -86,10 +75,10 @@ def retrieve_item(itemID):
         mouse.all_in_one(x, y, z, w)
         time.sleep(random.uniform(*MEDIUM_DELAY_RANGE))
 
-    for i, coin in range(item_database.lookup("coins")):
+    for image_name in os.listdir("resources/statics/coins"):
 
         try:
-            x, y, z, w = list(pyautogui.locateAllOnScreen('resources/items/{0}'.format(coin['image_name'])))[0]
+            x, y, z, w = list(pyautogui.locateAllOnScreen('resources/statics/image_name'))[0]
             mouse.all_in_one(x, y, z, w)
             break
 
@@ -119,3 +108,6 @@ def tab_switcher():
         mouse.all_in_one(x, y, z, w)
     except TypeError as e:
         return "Cannot goto tab inventory_tab"
+
+if __name__ == "__main__":
+    print(find_slots())
