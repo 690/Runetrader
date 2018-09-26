@@ -10,7 +10,7 @@ from classes import exchange
 
 
 def find_window(name="RuneLite"):
-    """ Find coordinates for a given window """
+    """ Returns handle and coordinates for a given window """
 
     hwnd = win32gui.FindWindow(None, name)
     coordinates = win32gui.GetWindowRect(hwnd)
@@ -23,6 +23,7 @@ class RunescapeInstance:
     def __init__(self, hwnd, coordinates):
         self.hwnd = hwnd
         self.coordinates = coordinates
+
         self.exchange = exchange.Exchange(self.coordinates)
 
     def tab_switcher(self):
