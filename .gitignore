@@ -1,0 +1,7 @@
+/data
+/venv
+/.idea
+/__pycache__
+tools/__pycache__
+items/
+inventory/

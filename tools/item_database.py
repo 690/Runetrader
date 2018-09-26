@@ -1,12 +1,16 @@
 import requests
 import json
 import os
+import tempfile
+import io
+
 BASE_URL = "http://services.runescape.com/m=itemdb_oldschool"
 
 GET_ITEM_URL = "/api/catalogue/detail.json?item={0}"
 GET_CATAGORY_URL = "/api/catalogue/items.json?category=1&alpha={0}&page={0}"
 GET_HISTORIC_VALUE_URL = "/api/graph/{0}.json"
 
+from PIL import Image
 
 def build_item_database():
     """ Collects json data for each item in the game, then saves it as a json file """
@@ -24,12 +28,15 @@ def build_item_database():
         except Exception as e:
             break
 
-        if i > 10000:
+        if i % 1000 == 0:
+            print(i)
+
+        if i > 15000:
             break
 
         i += 1
-    with open('data/items.json', 'w') as f:
-        json.dump(items, f)
+    with open('../data/items.json', 'w') as e:
+        json.dump(items, e)
 
 
 def build_api_call(FUNCTION_URL, itemID, **kwargs):
@@ -87,19 +94,23 @@ def getcatagory(itemID, page=1):
     return harvest(GET_CATAGORY_URL, itemID, page)
 
 
+def getlimit(itemID):
+    pass
+
+
 def item_name_to_id(item_name):
     """ Does a lookup in the item file, returning the appropriate ID for the given item """
 
-    with open('../data/items.json', 'r') as f:
+    with open('data/items.json', 'r') as f:
         for item in json.load(f):
-            if item['name'] == item_name:
+            if item['name'].lower() == item_name.lower():
                 return item['id']
 
 
 def item_id_to_name(itemID):
     """ Does a lookup in the item file, returning the appropriate name for the given item """
 
-    with open('../data/items.json', 'r') as f:
+    with open('/data/items.json', 'r') as f:
         for item in json.load(f):
             if item['id'] == itemID:
                 return item['name']
@@ -108,26 +119,43 @@ def item_id_to_name(itemID):
 def get_item_image(itemID):
     """ Looks for an image for the item with the given itemID, if not found, it then downloads and saves the image """
 
-    for i in os.listdir("../resources/items"):
+    for i in os.listdir("./resources/items"):
         if i[:-4] == str(itemID):
-            return "resources/items" + i
+            return Image.open("./resources/items/{0}.png".format(itemID))
 
-    with open('../data/items.json', 'r') as f:
+    with open('./data/items.json', 'r') as f:
         for item in json.load(f):
             if item['id'] == itemID:
-                image_name = str(itemID) + ".png"
-                with open("../resources/items/" + image_name, 'wb') as f:
+                with open("./resources/items/{0}.png".format(itemID), 'wb') as f:
                     f.write(requests.get(item['icon']).content)
-                    return "resources/items/" + image_name
+                    return Image.open("./resources/items/{0}.png".format(itemID))
+
+
+def get_item_limit(itemID):
+    """ Returns the GE buy limit for a given item, if not stored locally,
+     download and append to items.json data file """
+
+    #  TODO  instead of doing a json.dump there must be a way to edit one line instead of rewriting all of it
+
+    with open('/data/items.json', 'r') as f:
+        lines = json.load(f)
+
+        for line in lines:
+            if line['id'] == itemID:
+                try:
+                    return line['ge_limit']
+                except KeyError as e:
+                    line['ge_limit'] = getlimit(itemID)
+                    json.dump(lines, f)
+                    return line['ge_limit']
 
 
 def create_example():
     """ Writes example json to "exchange_api_example.json """
 
-    with open('../data/exchange_api_example.json', 'w') as f:
+    with open('/data/exchange_api_example.json', 'w') as f:
         json.dump(getitem(2), f)
 
 
 if __name__ == "__main__":
-    """ Run Unit Test"""
-    print(get_item_image(267))
+    get_item_image(1935)

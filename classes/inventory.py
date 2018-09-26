@@ -2,8 +2,7 @@
 import pickle
 from classes import items
 from tools import item_database
-
-my_inventory = None
+import pyautogui
 
 
 class inventory:
@@ -17,13 +16,13 @@ class inventory:
     def load_inventory(self):
         """ loads inventory.pickle into the current inventory_list, replacing the old one."""
 
-        with open('data/inventory.pickle', 'rb') as f:
+        with open('../data/inventory.pickle', 'rb') as f:
             self.inventory_list = pickle.load(f)
 
     def save_inventory(self):
         """ Writes the current inventory to inventory.pickle """
 
-        with open('data/inventory.pickle ', 'wb') as f:
+        with open('../data/inventory.pickle ', 'wb') as f:
             pickle.dump(self.inventory_list, f)
 
     def add(self, item):
@@ -64,4 +63,3 @@ class inventory:
 
 def setup(coin_capital):
     my_inventory = inventory(coin_capital)
-

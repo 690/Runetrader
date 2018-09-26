@@ -9,8 +9,6 @@ from tools.utils import random_position
 def random_path(x1, y1, x2, y2):
     """ Create a random mouse movement path from one coordinate to another """
 
-    # TODO Convert function to not be input order dependant
-
     return x2, y2
 
 
@@ -21,7 +19,7 @@ def click(x, y):
     pyautogui.click(x, y)
 
 
-def move(target_x, target_y, **kwargs):
+def move(target_x, target_y):
     """ Move the mouse to a given point, using a random path and delays """
 
     time.sleep(random.uniform(*SMALL_DELAY_RANGE))
