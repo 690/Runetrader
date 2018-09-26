@@ -13,17 +13,17 @@ def typeerror(type=None):
 
     if type == int:
         chars = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    elif type == str or not type:
+    else:
         chars = string.ascii_letters
 
     n = random.randint(1, 4)
 
     for i in range(1, n):
-        time.sleep(random.uniform(*REACTION_DELAY))
+        time.sleep(random.uniform(*REACTION_DELAY)*0.75)
         write(random.choice(chars))
 
     for i in range(1, n):
-        time.sleep(random.uniform(*REACTION_DELAY)*0.75)
+        time.sleep(random.uniform(*REACTION_DELAY))
         pyautogui.press('backspace')
 
 
@@ -47,8 +47,3 @@ def write(text, type=None):
 def press(key):
     time.sleep(random.uniform(*SMALL_DELAY_RANGE))
     pyautogui.press(key)
-
-
-if __name__ == "__main__":
-    pass
-

@@ -1,24 +1,25 @@
 import pyautogui
-from tools import realistic_keyboard as keyboard, realistic_mouse as mouse
-
 import os
 import random
 import time
-from config import MEDIUM_DELAY_RANGE
-import math
 import win32gui
+
+from tools import realistic_mouse as mouse
+from config import MEDIUM_DELAY_RANGE
 from classes import exchange
 
-def find_runescape_window():
-    print("Finding coordinates for runescape window")
 
-    hwnd = win32gui.FindWindow(None, "RuneLite")
+def find_window(name="RuneLite"):
+    """ Find coordinates for a given window """
+
+    hwnd = win32gui.FindWindow(None, name)
     coordinates = win32gui.GetWindowRect(hwnd)
     print(hwnd, coordinates)
     return hwnd, coordinates
 
 
-class runescape_instance:
+class RunescapeInstance:
+    """ Instance of the Runescape window """
 
     def __init__(self, hwnd, coordinates):
         self.hwnd = hwnd
@@ -29,24 +30,25 @@ class runescape_instance:
 
 
 def tab_switcher():
+    """ Randomly switches tabs and interacts in the sidebar """
 
     tab = "inventory_tab.png"
 
-    for i in random.sample(os.listdir("resources/tabs"), len(os.listdir("resources/tabs"))):
+    for i in random.sample(os.listdir("resources/regions/sidebar/tabs"), len(os.listdir("resources/regions/sidebar/tabs"))):
         if i != tab:
             tab = i
             break
 
     try:
-        x, y, z, w = pyautogui.locateOnScreen("resources/tabs/{0}".format(tab))
+        x, y, z, w = pyautogui.locateOnScreen("resources/regions/sidebar/tabs/{0}".format(tab))
         mouse.all_in_one(x, y, z, w)
     except TypeError as e:
-        return "Cannot goto tab {0}".format(tab)
+        return "Cannot go to tab {0}".format(tab)
 
     time.sleep(random.uniform(*MEDIUM_DELAY_RANGE))
 
     try:
-        x, y, z, w = pyautogui.locateOnScreen("resources/tabs/inventory_tab.png")
+        x, y, z, w = pyautogui.locateOnScreen("resources/regions/sidebar/tabs/inventory_tab.png")
         mouse.all_in_one(x, y, z, w)
     except TypeError as e:
-        return "Cannot goto tab inventory_tab"
+        return "Cannot go to tab inventory_tab"

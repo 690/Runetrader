@@ -15,20 +15,24 @@ def place_buy_order(exchange, item, amount, price):
     mouse.all_in_one(*slot.buy_button)
 
     time.sleep(random.uniform(*MEDIUM_DELAY_RANGE))
+
+    try:
+        x, y, z, w = pyautogui.locateOnScreen("./resources/regions/exchange/first_item.png")
+
+    except TypeError as e:
+        print("{0} was not found in GE".format(item.name))
+        return Exception("Chosen item could not be found")
+
+
     keyboard.write(item.name, str)
 
     print(exchange.parent_coordinates)
 
     print("\n Trying to find item", item.name)
 
-    try:
-        print(item.name)
-        x, y, z, w = pyautogui.locateOnScreen(item.image, region=exchange.search_inventory)
-        print(x, y, z, w)
-        mouse.all_in_one(x, y, z, w)
 
-    except TypeError as e:
-        print("{0} was not found in GE".format(item.name))
+
+    mouse.all_in_one(x, y, z, w+25)
 
     exchange.set_price(price)
     exchange.set_amount(amount)
@@ -38,7 +42,7 @@ def place_buy_order(exchange, item, amount, price):
     exchange.confirm()
 
     exchange.empty_slots = [s for s in exchange.empty_slots if s != slot]
-    return orders.Order(exchange, item, amount, price)
+    return orders.Order(slot, item, amount, price)
 
 
 def place_sell_order(exchange, item, amount, price):
