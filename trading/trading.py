@@ -1,10 +1,9 @@
-import window
 from tools import realistic_keyboard as keyboard, realistic_mouse as mouse
 import time
 import pyautogui
 import random
 from config import *
-from classes import items, orders
+from classes import orders, runescape
 
 
 def place_buy_order(exchange, item, amount, price):
@@ -18,21 +17,12 @@ def place_buy_order(exchange, item, amount, price):
 
     try:
         x, y, z, w = pyautogui.locateOnScreen("./resources/regions/exchange/first_item.png")
-
     except TypeError as e:
-        print("{0} was not found in GE".format(item.name))
         return Exception("Chosen item could not be found")
-
 
     keyboard.write(item.name, str)
 
-    print(exchange.parent_coordinates)
-
-    print("\n Trying to find item", item.name)
-
-
-
-    mouse.all_in_one(x, y, z, w+25)
+    mouse.all_in_one(x+10, y+20, z-10, w+25)
 
     exchange.set_price(price)
     exchange.set_amount(amount)
@@ -59,8 +49,8 @@ def place_sell_order(exchange, item, amount, price):
 
     mouse.all_in_one(x, y, z, w)
 
-    window.set_price(price)
-    window.set_amount(amount)
+    runescape.set_price(price)
+    runescape.set_amount(amount)
 
     time.sleep(random.uniform(*MEDIUM_DELAY_RANGE))
 

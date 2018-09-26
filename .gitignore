@@ -3,5 +3,6 @@
 /.idea
 /__pycache__
 tools/__pycache__
+classes/__pycache__
 items/
 inventory/

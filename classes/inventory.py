@@ -1,11 +1,9 @@
-
 import pickle
 from classes import items
 from tools import item_database
-import pyautogui
 
 
-class inventory:
+class Inventory:
 
     def __init__(self, coin_capital):
 
@@ -62,4 +60,4 @@ class inventory:
 
 
 def setup(coin_capital):
-    my_inventory = inventory(coin_capital)
+    my_inventory = Inventory(coin_capital)

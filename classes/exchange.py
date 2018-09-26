@@ -16,12 +16,11 @@ class Slot:
         self.sell_button = pyautogui.locateOnScreen('./resources/regions/exchange/sell_button.png', region=self.coordinates)
 
 
-
 class Exchange:
 
-    def __init__(self, parent_coordinates):
+    def __init__(self, parent):
 
-        self.parent_coordinates = parent_coordinates
+        self.parent_coordinates = parent.coordinates
         try:
             self.coordinates = pyautogui.locateOnScreen('./resources/regions/exchange/exchange_window.png', region=self.parent_coordinates)
             print("Exchange coordinates:", self.coordinates)
@@ -29,23 +28,19 @@ class Exchange:
         except TypeError as e:
             print("Couldnt find exchange")
 
-        print("\nFinding empty order slots")
         self.empty_slots = self.find_empty_slots()
 
-        print([str(slot) + ",\n " for slot in self.empty_slots],)
+        print([str(slot) + ", " for slot in self.empty_slots],)
 
         mouse.all_in_one(*self.empty_slots[0].buy_button)
 
         try:
-            print("\nFinding Exchange Button locations")
             self.back_button = pyautogui.locateOnScreen('./resources/regions/exchange/back_button.png', region=self.coordinates)
-            self.confirm_button = pyautogui.locateOnScreen('./resources/regions/exchange/confirm_button.png',
-                                                           region=self.coordinates)
-            self.set_amount_button, self.set_price_button = list(pyautogui.locateAllOnScreen('./resources/regions/exchange/set_price_button.png',
-                                                                                             region=self.coordinates))[:2]
-            print("\n Finding search inventory")
-            self.search_inventory = pyautogui.locateOnScreen('./resources/regions/chat/g.png',
-                                                             region=self.parent_coordinates)
+            self.confirm_button = pyautogui.locateOnScreen('./resources/regions/exchange/confirm_button.png', region=self.coordinates)
+            self.set_amount_button, self.set_price_button = \
+                list(pyautogui.locateAllOnScreen('./resources/regions/exchange/set_price_button.png', region=self.coordinates))[:2]
+
+            self.search_inventory = pyautogui.locateOnScreen('./resources/regions/chat/g.png', region=self.parent_coordinates)
 
             mouse.all_in_one(*self.back_button)
         except TypeError as e:
@@ -54,11 +49,10 @@ class Exchange:
     def find_empty_slots(self):
         """ Finds all instances of empty Grand exchange slots, and returns a list of GE_SLOT objects """
 
-        return [Slot(coordinates) for coordinates in pyautogui.locateAllOnScreen("./resources/regions/exchange/slot.png",
-                                                                                 region=self.coordinates)]
+        return [Slot(coordinates) for coordinates in pyautogui.locateAllOnScreen("./resources/regions/exchange/slot.png", region=self.coordinates)]
 
     def set_price(self, price):
-        """ Collect all availablae orders """
+        """ Collect all available orders """
 
         x, y, z, w = self.set_price_button
 
@@ -97,7 +91,6 @@ class Exchange:
     def retrieve_items(self, order):
         """ Retrives items from a completed order """
 
-        print(order.slot.coordinates)
         mouse.move(*order.slot.coordinates)
 
     def order_completed(self, order):

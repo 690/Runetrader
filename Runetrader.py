@@ -1,11 +1,12 @@
-from classes import items
-import window
-import trading
-import time
+from classes import items, runescape
+from trading import trading
 
-hwnd, coordinates = window.find_runescape_window()
-client = window.RunescapeInstance(hwnd, coordinates)
+hwnd, coordinates = runescape.find_window()
+client = runescape.RunescapeInstance(hwnd, coordinates)
 
+order = trading.place_buy_order(client.exchange, items.Item("Mithril bar"), 10, 800)
 
-m_bar = items.Item("Mithril bar")
-order = trading.place_buy_order(client.exchange, m_bar, 10, 811)
+if __name__ == "__main__":
+    """ Run the complete program """
+
+    pass
