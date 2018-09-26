@@ -2,6 +2,7 @@ from tools import realistic_mouse as mouse, utils
 from classes import runescape
 import pyautogui
 import json
+import time
 
 
 def first_run():
@@ -19,7 +20,12 @@ def first_run():
     back_button = pyautogui.locateOnScreen('./resources/regions/exchange/back_button.png',region=coordinates)
     confirm_button = pyautogui.locateOnScreen('./resources/regions/exchange/confirm_button.png', region=coordinates)
     set_amount_button, set_price_button = list(pyautogui.locateAllOnScreen('./resources/regions/exchange/set_price_button.png',region=coordinates))[:2]
+    time.sleep(0.25)
     search_inventory = pyautogui.locateOnScreen('./resources/regions/chat/g.png',region=client.coordinates)
+
+    percent_up_button = pyautogui.locateOnScreen('./resources/regions/exchange/procent_up_button.png',region=coordinates)
+    percent_down_button = pyautogui.locateOnScreen('./resources/regions/Exchange/procent_down_button.png',region=coordinates)
+
 
     mouse.all_in_one(*back_button)
 
@@ -48,7 +54,13 @@ def first_run():
                 utils.dynamic_coordinate_converter(client.coordinates, set_price_button, '-')),
 
             "search_inventory" : "{0}".format(
-                utils.dynamic_coordinate_converter(client.coordinates, search_inventory, '-'))
+                utils.dynamic_coordinate_converter(client.coordinates, search_inventory, '-')),
+
+            "percent_up_button": "{0}".format(
+                utils.dynamic_coordinate_converter(client.coordinates, percent_up_button, '-')),
+
+            "percent_down_button": "{0}".format(
+                utils.dynamic_coordinate_converter(client.coordinates, percent_down_button, '-')),
         }
     }
 

@@ -5,7 +5,7 @@ import time
 import win32gui
 
 from tools import realistic_mouse as mouse
-from config import MEDIUM_DELAY_RANGE
+from config import *
 from classes import exchange
 
 
@@ -25,6 +25,8 @@ class RunescapeInstance:
         self.coordinates = coordinates
 
         self.exchange = exchange.Exchange(self.coordinates)
+
+        self.is_member = membership
 
     def tab_switcher(self):
         """ Randomly switches tabs and interacts in the sidebar """

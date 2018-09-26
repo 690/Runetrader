@@ -54,12 +54,20 @@ class Exchange:
             self.search_inventory = utils.dynamic_coordinate_converter(self.parent_coordinates,
                                                                  coordinates['Exchange']['search_inventory'], '+')
 
-            print(self.buy_button)
+            self.percent_up_button = utils.dynamic_coordinate_converter(self.parent_coordinates,
+                                                                       coordinates['Exchange']['percent_up_button'], '+')
+
+            self.percent_down_button = utils.dynamic_coordinate_converter(self.parent_coordinates,
+                                                                       coordinates['Exchange']['percent_down_button'], '+')
+
+            print(self.coordinates)
+            self.empty_slots = self.find_empty_slots()
+
+            print("debug, exchange.py", self.empty_slots, self.coordinates)
 
     def find_empty_slots(self):
         """ Finds all instances of empty Grand exchange slots, and returns a list of GE_SLOT objects """
-
-        return [Slot(coordinates) for coordinates in pyautogui.locateAllOnScreen("./resources/regions/exchange/slot.png", region=self.coordinates)]
+        return [Slot(coordinates) for coordinates in pyautogui.locateAllOnScreen("./resources/regions/exchange/slot.png")]
 
     def set_price(self, price):
         """ Collect all available orders """
@@ -98,10 +106,23 @@ class Exchange:
 
         mouse.all_in_one(x, y, z, w)
 
+
     def retrieve_items(self, order):
         """ Retrives items from a completed order """
 
-        mouse.move(*order.slot.coordinates)
+
+        mouse.all_in_one(*order.slot.coordinates)
+        for item_spot in order.slot.item_spots:
+            mouse.all_in_one(item_spot)
+
+        self.empty_slots = self.empty_slots.append(order.slot)
+
+    def abort_order(self, order):
+        """ Aborts an order in progress """
+        mouse.all_in_one(*order.slot)
+        mouse.all_in_one(*pyautogui.locateOnScreen("./resources/regions/exchange/abort_button.png"))
+        mouse.all_in_one(*self.back_button)
+        self.retrieve_items(order)
 
     def order_completed(self, order):
         return pyautogui.locateOnScreen("./resources/regions/exchange/completed_order.png", region = order.slot.coordinates) is not None

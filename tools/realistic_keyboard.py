@@ -40,7 +40,7 @@ def write(text, type=None):
             else:
                 typeerror(int)
 
-        time.sleep(random.uniform(*REACTION_DELAY)*0.25)
+        time.sleep(random.uniform(*REACTION_DELAY)*0.1)
         pyautogui.typewrite(i, 0.1)
 
 

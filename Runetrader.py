@@ -1,13 +1,8 @@
 from tools import builder
 from classes import runescape
+from classes import states
 import os
-from tools import realistic_mouse as mouse
 
-"""
-hwnd, coordinates = runescape.find_window()
-client = runescape.RunescapeInstance(hwnd, coordinates)
-order = trading.place_buy_order(client.exchange, items.Item("Mithril bar"), 10, 800)
-"""
 
 if __name__ == "__main__":
     """ Run the complete program """
@@ -22,3 +17,8 @@ if __name__ == "__main__":
 
     hwnd, coordinates = runescape.find_window()
     client = runescape.RunescapeInstance(hwnd, coordinates)
+
+
+    state = input("\n: ")
+
+    states.op_dict[state](client)
