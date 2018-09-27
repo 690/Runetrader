@@ -18,7 +18,6 @@ if __name__ == "__main__":
     hwnd, coordinates = runescape.find_window()
     client = runescape.RunescapeInstance(hwnd, coordinates)
 
-
     state = input("\n: ")
 
     states.op_dict[state](client)

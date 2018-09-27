@@ -13,6 +13,8 @@ def find_margins(client):
 
     print(margins)
 
+
+
 op_dict = {'find margins' : find_margins}
 
 

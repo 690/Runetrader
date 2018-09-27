@@ -19,6 +19,9 @@ class Slot:
         self.sell_button = pyautogui.locateOnScreen('./resources/regions/exchange/sell_button.png', region=self.coordinates)
 
 
+
+
+
 class Exchange:
 
     def __init__(self, parent_coordinates):
@@ -60,8 +63,15 @@ class Exchange:
             self.percent_down_button = utils.dynamic_coordinate_converter(self.parent_coordinates,
                                                                        coordinates['Exchange']['percent_down_button'], '+')
 
+            self.abort_button = utils.dynamic_coordinate_converter(self.parent_coordinates,
+                                                                       coordinates['Exchange']['abort_button'], '+')
+
+            self.item_slots = utils.dynamic_coordinate_converter(self.parent_coordinates, coordinates['Exchange']['item_slot_1'], '+'), \
+                              utils.dynamic_coordinate_converter(self.parent_coordinates, coordinates['Exchange']['item_slot_2'], '+')
+
             print(self.coordinates)
             self.empty_slots = self.find_empty_slots()
+
 
             print("debug, exchange.py", self.empty_slots, self.coordinates)
 
@@ -112,16 +122,17 @@ class Exchange:
 
 
         mouse.all_in_one(*order.slot.coordinates)
-        for item_spot in order.slot.item_spots:
-            mouse.all_in_one(item_spot)
+        for item_slot in self.item_slots:
+            mouse.all_in_one(*item_slot)
 
-        self.empty_slots = self.empty_slots.append(order.slot)
+        print(self.empty_slots)
+        self.empty_slots += [order.slot]
+        print(self.empty_slots)
 
     def abort_order(self, order):
         """ Aborts an order in progress """
-        mouse.all_in_one(*order.slot)
-        mouse.all_in_one(*pyautogui.locateOnScreen("./resources/regions/exchange/abort_button.png"))
-        mouse.all_in_one(*self.back_button)
+        mouse.all_in_one(*order.slot.coordinates)
+        mouse.all_in_one(*self.abort_button)
         self.retrieve_items(order)
 
     def order_completed(self, order):

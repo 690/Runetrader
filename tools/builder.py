@@ -1,4 +1,4 @@
-from tools import realistic_mouse as mouse, utils
+from tools import realistic_mouse as mouse, realistic_keyboard as keyboard, utils
 from classes import runescape
 import pyautogui
 import json
@@ -15,7 +15,8 @@ def first_run():
     buy_button = pyautogui.locateOnScreen('./resources/regions/exchange/buy_button.png', region=coordinates)
     sell_button = pyautogui.locateOnScreen('./resources/regions/exchange/sell_button.png', region=coordinates)
 
-    mouse.all_in_one(*buy_button)
+    t = buy_button
+    mouse.all_in_one(*t)
 
     back_button = pyautogui.locateOnScreen('./resources/regions/exchange/back_button.png',region=coordinates)
     confirm_button = pyautogui.locateOnScreen('./resources/regions/exchange/confirm_button.png', region=coordinates)
@@ -27,7 +28,25 @@ def first_run():
     percent_down_button = pyautogui.locateOnScreen('./resources/regions/Exchange/procent_down_button.png',region=coordinates)
 
 
+    keyboard.write("Mithril bar", str)
+    x,y,z,w = pyautogui.locateOnScreen("./resources/regions/exchange/first_item.png")
+    mouse.all_in_one(x+10,y+5,z,w)
+    mouse.all_in_one(*set_price_button)
+    keyboard.write(1, int)
+    keyboard.press("enter")
+    mouse.all_in_one(*confirm_button)
+    mouse.all_in_one(*t)
+
+
+    item_slot_1, item_slot_2 = list(pyautogui.locateAllOnScreen('./resources/regions/exchange/item_slot.png',region=coordinates))[:2]
+    abort_button = pyautogui.locateOnScreen('./resources/regions/Exchange/abort_button.png',region=coordinates)
+
+    mouse.all_in_one(*abort_button)
+    for item_slot in [item_slot_1, item_slot_2]:
+        mouse.all_in_one(*item_slot)
+
     mouse.all_in_one(*back_button)
+
 
     dynamic_coordinates = {
 
@@ -61,6 +80,16 @@ def first_run():
 
             "percent_down_button": "{0}".format(
                 utils.dynamic_coordinate_converter(client.coordinates, percent_down_button, '-')),
+
+            "abort_button": "{0}".format(
+                utils.dynamic_coordinate_converter(client.coordinates, abort_button, '-')),
+
+            "item_slot_1" : "{0}".format(
+                utils.dynamic_coordinate_converter(client.coordinates, item_slot_1, '-')),
+
+            "item_slot_2": "{0}".format(
+                utils.dynamic_coordinate_converter(client.coordinates, item_slot_2, '-')),
+
         }
     }
 

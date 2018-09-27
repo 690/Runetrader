@@ -12,6 +12,7 @@ def find_margin(exchange, item_name):
     item = items.Item(item_name)
 
     slot = exchange.empty_slots[0]
+    exchange.empty_slots = [s for s in exchange.empty_slots if s != slot]
 
     mouse.all_in_one(*slot.buy_button)
     time.sleep(random.uniform(*MEDIUM_DELAY_RANGE))
@@ -39,14 +40,13 @@ def find_margin(exchange, item_name):
     t = datetime.datetime.now()
 
     while not exchange.order_completed(order):
-        if (datetime.now() - t) > datetime.timedelta(seconds=10):
-            exchange.abort_order()
+        if (datetime.datetime.now() - t) > datetime.timedelta(seconds=10):
+            exchange.abort_order(order)
             return None
 
-    exchange.retrieve_items(exchange, order)
+    exchange.retrieve_items(order)
 
     # sell
-
 
 
 def place_buy_order(exchange, item, amount, price):
