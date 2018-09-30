@@ -8,6 +8,9 @@ from config import SMALL_DELAY_RANGE
 from tools.utils import random_position
 
 
+pyautogui.MINIMUM_SLEEP = 0
+pyautogui.MINIMUM_DURATION = 0g
+
 def move(target_x, target_y):
     """ Move mouse according to random bezier curve
     credit : DJV : https://stackoverflow.com/a/44666798 """
