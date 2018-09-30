@@ -8,6 +8,7 @@ from config import *
 from tools import realistic_mouse as mouse
 from tools import realistic_keyboard as keyboard
 from tools import utils
+from tools import ocr
 
 
 class Slot:
@@ -17,9 +18,6 @@ class Slot:
 
         self.buy_button = pyautogui.locateOnScreen('./resources/regions/exchange/buy_button.png', region=self.coordinates)
         self.sell_button = pyautogui.locateOnScreen('./resources/regions/exchange/sell_button.png', region=self.coordinates)
-
-
-
 
 
 class Exchange:
@@ -54,8 +52,8 @@ class Exchange:
             self.set_amount_button = utils.dynamic_coordinate_converter(self.parent_coordinates,
                                                                  coordinates['Exchange']['set_amount_button'], '+')
 
-            self.search_inventory = utils.dynamic_coordinate_converter(self.parent_coordinates,
-                                                                 coordinates['Exchange']['search_inventory'], '+')
+            self.chat_window = utils.dynamic_coordinate_converter(self.parent_coordinates,
+                                                                 coordinates['Exchange']['chat_window'], '+')
 
             self.percent_up_button = utils.dynamic_coordinate_converter(self.parent_coordinates,
                                                                        coordinates['Exchange']['percent_up_button'], '+')
@@ -69,9 +67,10 @@ class Exchange:
             self.item_slots = utils.dynamic_coordinate_converter(self.parent_coordinates, coordinates['Exchange']['item_slot_1'], '+'), \
                               utils.dynamic_coordinate_converter(self.parent_coordinates, coordinates['Exchange']['item_slot_2'], '+')
 
-            print(self.coordinates)
-            self.empty_slots = self.find_empty_slots()
+            self.first_item = utils.dynamic_coordinate_converter(parent_coordinates, "(85, 411, 5, 5)", '+')
+            self.first_inv = utils.dynamic_coordinate_converter(parent_coordinates, "(752, 433, 5, 5)", '+')
 
+            self.empty_slots = self.find_empty_slots()
 
             print("debug, exchange.py", self.empty_slots, self.coordinates)
 
@@ -91,50 +90,59 @@ class Exchange:
         keyboard.press("enter")
 
     def set_amount(self, amount):
-        """ Collect all available orders """
+        """ set amount of item. If the amount if low,
+        press the + button instead of typing the item amount """
 
-        x, y, z, w = self.set_amount_button
+        if amount == 1:
+            return
+        elif amount < random.randint(4, 6):
+            mouse.random_move(*self.amount_plus_button)
+            for i in range(1, amount):
+                mouse.click()
+        else:
+            mouse.all_in_one(*self.set_amount_button)
+            time.sleep(random.uniform(*MEDIUM_DELAY_RANGE))
 
-        mouse.all_in_one(x, y, z, w)
-        time.sleep(random.uniform(*MEDIUM_DELAY_RANGE))
-
-        keyboard.write(str(amount), int)
-        keyboard.press("enter")
+            keyboard.write(str(amount), int)
+            keyboard.press("enter")
 
     def confirm(self):
         """ Confirms the trade-in-progress """
 
-        print(self.confirm_button)
         mouse.all_in_one(*self.confirm_button)
 
     def collect_orders(self):
         """ Collect all available orders """
-        try:
-            x, y, z, w = pyautogui.locateOnScreen('./resources/regions/exchange/collect.png')
-        except TypeError as e:
-            print("No orders available for collection")
 
-        mouse.all_in_one(x, y, z, w)
+        mouse.all_in_one(*self.collect_button)
 
-
-    def retrieve_items(self, order):
+    def retrieve_items(self, slot):
         """ Retrives items from a completed order """
 
-
-        mouse.all_in_one(*order.slot.coordinates)
+        mouse.all_in_one(*slot.coordinates)
         for item_slot in self.item_slots:
             mouse.all_in_one(*item_slot)
 
-        print(self.empty_slots)
-        self.empty_slots += [order.slot]
-        print(self.empty_slots)
+        self.empty_slots += [slot]
 
-    def abort_order(self, order):
+        if membership:
+            mouse.all_in_one(*self.back_button)
+
+    def abort_order(self, slot):
         """ Aborts an order in progress """
-        mouse.all_in_one(*order.slot.coordinates)
-        mouse.all_in_one(*self.abort_button)
-        self.retrieve_items(order)
 
-    def order_completed(self, order):
-        return pyautogui.locateOnScreen("./resources/regions/exchange/completed_order.png", region = order.slot.coordinates) is not None
+        if 1 == 1:
+            mouse.random_move(*slot.coordinates)
+            mouse.click(button="right")
+            x, y = pyautogui.position()
+            pos = x, y + round(self.buy_button[2]/3*2)
+            mouse.random_move(*pos, 5, 5)
+            mouse.click()
+            mouse.all_in_one(*slot.coordinates)
+        else:
+            mouse.all_in_one(*slot.coordinates)
+            mouse.all_in_one(*self.abort_button)
+
+    def order_completed(self, slot):
+        return pyautogui.locateOnScreen("./resources/regions/exchange/completed_order.png", region=slot.coordinates) is not None
 

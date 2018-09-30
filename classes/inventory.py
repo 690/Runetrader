@@ -8,7 +8,7 @@ class Inventory:
     def __init__(self, coin_capital):
 
         inventory_list = [0 for x in range(0, 28)]
-        self.inventory_list[0] = items.item('coins', coin_capital)
+        self.inventory_list[0] = items.Item('coins', coin_capital)
         self.save_inventory()
 
     def load_inventory(self):

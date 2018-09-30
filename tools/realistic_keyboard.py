@@ -3,9 +3,7 @@ import random
 import string
 import time
 
-from config import SMALL_DELAY_RANGE
-from config import REACTION_DELAY
-from config import SPELLING_MISTAKE_RATIO
+from config import *
 
 
 def typeerror(type=None):
@@ -30,18 +28,26 @@ def typeerror(type=None):
 def write(text, type=None):
     """ Writes text to highlighted window with random delays and typing errors """
 
-    time.sleep(random.uniform(*SMALL_DELAY_RANGE))
+    time.sleep(random.uniform(*LONG_DELAY_RANGE))
+
+    reset = False
+
+    if random.randint(1, MISTAKE_RATIO) == 1:
+        pyautogui.press('capslock')
+        reset = True
 
     for i in str(text):
-
-        if random.randint(1, SPELLING_MISTAKE_RATIO) == 1:
+        if random.randint(1, MISTAKE_RATIO) == 1:
             if not type:
-                typeerror(str)
-            else:
                 typeerror(int)
+            else:
+                typeerror(str)
 
         time.sleep(random.uniform(*REACTION_DELAY)*0.1)
         pyautogui.typewrite(i, 0.1)
+
+    if reset:
+        pyautogui.press('capslock')
 
 
 def press(key):

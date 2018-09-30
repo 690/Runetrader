@@ -1,8 +1,6 @@
 import requests
 import json
 import os
-import tempfile
-import io
 
 BASE_URL = "http://services.runescape.com/m=itemdb_oldschool"
 
@@ -11,6 +9,7 @@ GET_CATAGORY_URL = "/api/catalogue/items.json?category=1&alpha={0}&page={0}"
 GET_HISTORIC_VALUE_URL = "/api/graph/{0}.json"
 
 from PIL import Image
+
 
 def build_item_database():
     """ Collects json data for each item in the game, then saves it as a json file """
@@ -121,14 +120,16 @@ def get_item_image(itemID):
 
     for i in os.listdir("./resources/items"):
         if i[:-4] == str(itemID):
-            return Image.open("./resources/items/{0}.png".format(itemID))
+            return "./resources/items/{0}.png".format(itemID)
 
     with open('./data/items.json', 'r') as f:
         for item in json.load(f):
             if item['id'] == itemID:
                 with open("./resources/items/{0}.png".format(itemID), 'wb') as f:
                     f.write(requests.get(item['icon']).content)
-                    return Image.open("./resources/items/{0}.png".format(itemID))
+                    return "./resources/items/{0}.png".format(itemID)
+
+    return "No image found"
 
 
 def get_item_limit(itemID):

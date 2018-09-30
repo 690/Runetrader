@@ -1,16 +1,13 @@
 from tools import builder
-from classes import runescape
-from classes import states
-import os
+from classes import runescape, items
+from lib import basic_functions as ef
 
+import os
 
 if __name__ == "__main__":
     """ Run the complete program """
 
     if not os.path.exists("./data/dynamic_coordinates.json"):
-        """ If there is no existing file containing the dynamic coordinates for windows and the buttons therein:
-            run a Runescape instance, locate positions and store them """
-
         builder.first_run()
 
     # Find and instantiate client and objects
@@ -18,6 +15,7 @@ if __name__ == "__main__":
     hwnd, coordinates = runescape.find_window()
     client = runescape.RunescapeInstance(hwnd, coordinates)
 
-    state = input("\n: ")
+    dr = items.Item("Mithril bar")
 
-    states.op_dict[state](client)
+
+    ef.place_buy_order(client.exchange, dr, 1, 277)

@@ -7,4 +7,4 @@ class Item:
     def __init__(self, item_name):
         self.name = item_name
         self.itemID = item_database.item_name_to_id(self.name)
-        #self.image = item_database.get_item_image(itemID)
+        self.image = item_database.get_item_image(self.itemID)
