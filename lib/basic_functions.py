@@ -1,9 +1,12 @@
 from tools import realistic_mouse as mouse, realistic_keyboard as keyboard
-from classes import orders
+from classes import orders, items
 import pyautogui
+import datetime
 
 
-def find_margin(exchange, item):
+def find_margin(client, item):
+
+    exchange = client.exchange
 
     slot = exchange.empty_slots[0]
     exchange.empty_slots = [s for s in exchange.empty_slots if s != slot]
@@ -21,13 +24,37 @@ def find_margin(exchange, item):
 
     exchange.confirm()
 
+    time = datetime.datetime.now()
     while not exchange.order_completed(slot):
-        pass
+        if time < datetime.datetime.today() - datetime.timedelta(hours=1):
+            exchange.abort_order(slot)
+            return
 
+    client.inventory.add(item, 1)
     exchange.retrieve_items(slot)
 
+    mouse.all_in_one(*slot.sell_button)
 
-def place_buy_order(exchange, item, amount, price):
+    mouse.all_in_one(*client.inventory.find(item).coordinates)
+
+    mouse.random_move(*exchange.percent_down_button)
+    mouse.click()
+    mouse.click()
+    mouse.click()
+
+    exchange.confirm()
+
+    time = datetime.datetime.now()
+    while not exchange.order_completed(slot):
+        if time < datetime.datetime.today() - datetime.timedelta(hours=1):
+            exchange.abort_order(slot)
+            return
+
+    client.inventory.remove(item, 1)
+    exchange.retrieve_items(slot)
+
+def place_buy_order(client, item, amount, price):
+    exchange = client.exchange
 
     slot = exchange.empty_slots[0]
     exchange.empty_slots = [s for s in exchange.empty_slots if s != slot]
@@ -44,20 +71,19 @@ def place_buy_order(exchange, item, amount, price):
 
     exchange.confirm()
 
-    exchange.abort_order(slot)
-
     return orders.Order(slot, item)
 
 
-def place_sell_order(exchange, item, amount, price):
+def place_sell_order(client, item, amount, price):
+    exchange = client.exchange
 
     slot = exchange.empty_slots[0]
     exchange.empty_slots = [s for s in exchange.empty_slots if s != slot]
 
     mouse.all_in_one(*slot.sell_button)
 
-    # TODO  edit this line, to use inventory system and function inventory.get_item_coordinates()
-    mouse.all_in_one(*pyautogui.locateOnScreen(item.image))
+    inventory_spot = client.inventory.find(item)
+    mouse.all_in_one(*inventory_spot.coordinates)
 
     exchange.set_price(price)
 

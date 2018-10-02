@@ -3,10 +3,12 @@ import os
 import random
 import time
 import win32gui
+import json
+import config
 
-from tools import realistic_mouse as mouse
-from config import *
+from tools import realistic_mouse as mouse, utils
 from classes import exchange
+from classes.inventory import  Inventory
 
 
 def find_window(name="RuneLite"):
@@ -25,8 +27,15 @@ class RunescapeInstance:
         self.coordinates = coordinates
 
         self.exchange = exchange.Exchange(self.coordinates)
+        self.is_member = config.membership
 
-        self.is_member = membership
+        if os.path.exists("./data/dynamic_coordinates.json"):
+
+            file = open('./data/dynamic_coordinates.json', 'r')
+            coords = json.load(file)
+
+            self.inventory = Inventory(utils.dynamic_coordinate_converter(self.coordinates,
+                                                                          coords['inventory_window'], '+'))
 
     def tab_switcher(self):
         """ Randomly switches tabs and interacts in the sidebar """
@@ -45,7 +54,7 @@ class RunescapeInstance:
         except TypeError as e:
             print("Cannot go to tab {0}".format(tab))
 
-        time.sleep(random.uniform(*MEDIUM_DELAY_RANGE))
+        time.sleep(random.uniform(*config.MEDIUM_DELAY_RANGE))
 
         try:
             x, y, z, w = pyautogui.locateOnScreen("resources/regions/sidebar/tabs/inventory_tab.png")

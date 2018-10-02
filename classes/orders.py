@@ -8,4 +8,4 @@ class Order:
         self.slot = slot
         self.item = item
 
-        self.last_margin_check = datetime.datetime.now()
+        self.last_datetime = datetime.datetime.now()

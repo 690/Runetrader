@@ -1,63 +1,63 @@
 import pickle
-from classes import items
-from tools import item_database
+
+
+class Slot:
+
+    def __init__(self, coordinates, item, amount):
+        self.coordinates = coordinates
+        self.item = item
+        self.amount = amount
 
 
 class Inventory:
 
-    def __init__(self, coin_capital):
+    def __init__(self, coordinates):
 
-        inventory_list = [0 for x in range(0, 28)]
-        self.inventory_list[0] = items.Item('coins', coin_capital)
-        self.save_inventory()
+        self.coordinates = coordinates
+        self.inventory_list = []
 
-    def load_inventory(self):
-        """ loads inventory.pickle into the current inventory_list, replacing the old one."""
+        # Initialize 2D matrix of Slot objects for inventory
 
-        with open('../data/inventory.pickle', 'rb') as f:
-            self.inventory_list = pickle.load(f)
+        rows, cols = 7, 4
+        x0, y0, w, h = self.coordinates
 
-    def save_inventory(self):
-        """ Writes the current inventory to inventory.pickle """
+        for x in range(rows):
+            for y in range(cols):
+                nz = round(w / cols)
+                nw = round(h / rows)
+                nx = (x0 + nz * y)
+                ny = (y0 + nw * x)
 
-        with open('../data/inventory.pickle ', 'wb') as f:
-            pickle.dump(self.inventory_list, f)
+                print(nx, ny, nz, nw)
 
-    def add(self, item):
+                offset = round(nw/4)
+                self.inventory_list.append(Slot((nx+offset, ny+offset, nz-offset, nw-offset), None, None))
+
+    def find(self, item):
+        """ returns the Slot object containing the item """
+        for i, j in enumerate(self.inventory_list):
+            if self.inventory_list[i].item.itemID == item.itemID:
+                return self.inventory_list[i]
+        return None
+
+    def add(self, item, amount):
         """ Looks for an open spot in the inventory and adds the given item,
          if item already exists, it adds the given amount """
 
-        for i, j in enumerate(self.inventory_list):
-            try:
-                self.inventory_list[i].itemID == item.itemID
-                self.inventory_list[i].amount += item.amount
-                return
-            except AttributeError as e:
-                pass
+        for slot in self.inventory_list:
+            if slot.item is None:
+                slot.item = item
+                slot.amount = amount
 
-        for i, j in enumerate(self.inventory_list):
-            if self.inventory_list[i] == 0:
-                self.inventory_list[i] = items.item(item_database.item_id_to_name(item.itemID))
-                return
-
-        raise IndexError("No available inventory slots")
-
-    def remove(self, item):
+    def remove(self, item, amount):
         """ Removes a certain amount of a given itemID from the inventory list,
          if all are removed it deletes the entire entry """
 
-        for i, j in enumerate(self.inventory_list):
-            if self.inventory_list[i].itemID == item.itemID:
-                if item.amount == self.inventory_list[i].amount:
-                    self.inventory_list[i] = 0
+        for slot in self.inventory_list:
+            print(slot.item.itemID)
+            if slot.item.itemID == item.itemID:
+                if amount > slot.amount:
+                    slot.item = None
+                    slot.amount = None
                 else:
-                    self.inventory_list[i].amount -= int(item.amount)
-
-                self.save_inventory()
-                return None
-
-        raise IndexError("No item with id '{0}' in inventory".format(item.itemID))
-
-
-def setup(coin_capital):
-    my_inventory = Inventory(coin_capital)
+                    slot.amount -= amount

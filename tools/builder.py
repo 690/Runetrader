@@ -53,8 +53,9 @@ def first_run():
     collect_button = pyautogui.locateOnScreen('./resources/regions/Exchange/collect_button.png',region=coordinates)
     mouse.all_in_one(*collect_button)
 
+
     dynamic_coordinates = {
-        "Exchange": {
+
             "coordinates" : "{0}".format(
                 client.coordinates, coordinates),
 
@@ -93,8 +94,9 @@ def first_run():
 
             "item_slot_2": "{0}".format(
                 utils.dynamic_coordinate_converter(client.coordinates, item_slot_2, '-')),
+
         }
-    }
+
 
 
     json.dump(dynamic_coordinates, open("./data/dynamic_coordinates.json", 'w'))
