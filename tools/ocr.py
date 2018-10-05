@@ -17,7 +17,9 @@ CTN_DICT = {'o': '0',
             'k': '000',
             's': '5',
             'S': '5',
-            'W': '40'}
+            'W': '40',
+            '.': ' ',
+            ',': ''}
 
 
 def recognize_int(region):
@@ -26,10 +28,15 @@ def recognize_int(region):
     image = cv2.resize(image, (0, 0), fx=2, fy=2)
     image = PIL.Image.fromarray(image)
     txt = pytesseract.image_to_string(image, config='--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789')
+
     txt_list = [CTN_DICT[t] if t in list(CTN_DICT.keys()) else t for t in txt]
-    txt_list = ''.join(txt_list).split()
+    print(txt_list)
     txt_list = [int(x) for x in txt_list if x.isdigit()]
-    return list(txt_list)[0]
+
+    image.show()
+    input()
+    t = list(txt_list)[0]
+    return t
 
 
 def get_order_info(exchange):

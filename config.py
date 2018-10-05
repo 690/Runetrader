@@ -8,7 +8,7 @@ MISTAKE_RATIO = 25  # How often the bot should make a spelling mistake, as a rat
 DAILY_ACTIVITY = 8  # How many hours a day the bot should be active
 
 RANDOM_LOG = True
-membership = False
+membership = "false"
 
-
+RISK_TOLERANCE = 15  # Percentage of cash stack willing to lose, 15% recommended
 GP_CAPITAL = 366   # Only set this variable if you have less than 10k gp

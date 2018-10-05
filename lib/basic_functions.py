@@ -1,6 +1,13 @@
-from tools import realistic_mouse as mouse, realistic_keyboard as keyboard, ocr
-from classes import orders
+from tools import realistic_mouse as mouse, realistic_keyboard as keyboard
+from classes import orders, items
 import datetime
+import config
+import json
+
+
+def find_items():
+    data = json.load(open("./data/items.json", 'r'))
+    return [items.Item(item['name']) for item in data if item['members'] == config.membership]
 
 
 def find_margin(client, item):
@@ -29,7 +36,7 @@ def find_margin(client, item):
     client.inventory.remove(item, 1)
     p2, q2 = exchange.retrieve_items(order.slot)
 
-    return p1 - p2
+    return p1, p2
 
 
 def place_buy_order(client, item, amount, price):

@@ -1,6 +1,3 @@
-import pickle
-
-
 class Slot:
 
     def __init__(self, coordinates, item, amount):
@@ -35,12 +32,17 @@ class Inventory:
                 crop = round(nw/3)
                 self.inventory_list.append(Slot((nx+crop, ny+crop, nz-crop, nw-crop), None, 0))
 
+
+    @property
+    def coins(self):
+        return self.inventory_list[0].amount
+
     def find(self, item):
         """ returns the Slot object containing the item """
         for i, j in enumerate(self.inventory_list):
             if self.inventory_list[i].item.itemID == item.itemID:
                 return self.inventory_list[i]
-        return None
+            return None
 
     def add(self, item, amount):
         """ Looks for an open spot in the inventory and adds the given item,
@@ -57,7 +59,6 @@ class Inventory:
 
         for slot in self.inventory_list:
             if slot.item.itemID == item.itemID:
-
                 if amount > slot.amount:
                     slot.item = None
                     slot.amount = 0

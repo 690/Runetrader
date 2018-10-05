@@ -1,11 +1,13 @@
-from tools import builder, realistic_mouse as mouse, utils
-from classes import runescape, items
-import os, random
-import pyautogui
-from lib import basic_functions as ef
+import os
+import config
+
+from lib import basic_functions as rt
+from classes import runescape
+from tools import builder
+
 
 if __name__ == "__main__":
-    """ Run the complete program """
+    """ Start Runetrader"""
 
     if not os.path.exists("./data/dynamic_coordinates.json"):
         builder.first_run()
@@ -15,11 +17,19 @@ if __name__ == "__main__":
     hwnd, coordinates = runescape.find_window()
     client = runescape.RunescapeInstance(hwnd, coordinates)
 
+    while True:
+        """ Main event loop """
 
-    input()
+        items = rt.find_items()
+        for item in items:
+            p1, p2 = rt.find_margin(client, item)
+            margin = p1 - p2
+            print(margin)
+            #risk = rt.analyze_risk(margin, item)
+            ratio = p2 / margin
 
-    dr = items.Item("uncut emerald")
-    #for item in [random.choice(open("./data/custom/good_items.txt", 'r').readlines()) for x in range(1)]:
+            # or risk > config.RISK_TOLERANCE
+            if ratio not in range(1, 20):
+                continue
 
-    margin = ef.find_margin(client, dr)
-    print(margin)
+            #print(ratio)

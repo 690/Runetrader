@@ -70,8 +70,8 @@ class Exchange:
             self.first_item = utils.dynamic_coordinate_converter(parent_coordinates, "(85, 411, 5, 5)", '+')
             self.first_inv = utils.dynamic_coordinate_converter(parent_coordinates, "(752, 433, 5, 5)", '+')
 
-            self.quantity_info = utils.dynamic_coordinate_converter(parent_coordinates, "(109, 284, 235, 20)", '+')
-            self.price_info = utils.dynamic_coordinate_converter(parent_coordinates, "(139, 300, 195, 24)", '+')
+            self.quantity_info = utils.dynamic_coordinate_converter(parent_coordinates, "(276, 284, 100, 20)", '+')
+            self.price_info = utils.dynamic_coordinate_converter(parent_coordinates, "(250, 300, 20, 20)", '+')
 
             self.empty_slots = self.find_empty_slots()
 
