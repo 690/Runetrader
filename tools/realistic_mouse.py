@@ -36,11 +36,11 @@ def move(target_x, target_y):
     points = scipy.interpolate.splev(u, tck)
 
     duration = random.uniform(*SMALL_DELAY_RANGE)
-    timeout = duration / len(points[0])
+    timeout = duration / len(points[0]) * 0.15
 
     for point in zip(*(i.astype(int) for i in points)):
         pyautogui.moveTo(*point)
-        time.sleep(timeout)
+        #time.sleep(timeout)
 
 
 def click(button="left"):

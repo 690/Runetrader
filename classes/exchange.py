@@ -70,7 +70,8 @@ class Exchange:
             self.first_item = utils.dynamic_coordinate_converter(parent_coordinates, "(85, 411, 5, 5)", '+')
             self.first_inv = utils.dynamic_coordinate_converter(parent_coordinates, "(752, 433, 5, 5)", '+')
 
-            self.order_info = utils.dynamic_coordinate_converter(parent_coordinates, "(144, 282, 189, 43)", '+')
+            self.quantity_info = utils.dynamic_coordinate_converter(parent_coordinates, "(109, 284, 235, 20)", '+')
+            self.price_info = utils.dynamic_coordinate_converter(parent_coordinates, "(139, 300, 195, 24)", '+')
 
             self.empty_slots = self.find_empty_slots()
 
@@ -107,6 +108,8 @@ class Exchange:
     def confirm(self):
         """ Confirms the trade-in-progress """
 
+        # TODO   return the data of the items collected, to this by checking the inventory before and after collecting the items, very expensive function.
+
         mouse.all_in_one(*self.confirm_button)
 
     def collect_orders(self):
@@ -118,6 +121,11 @@ class Exchange:
         """ Retrives items from a completed order """
 
         mouse.all_in_one(*slot.coordinates)
+
+        time.sleep(1)
+
+        ocr_data = ocr.get_order_info(self)
+
         for item_slot in self.item_slots:
             mouse.all_in_one(*item_slot)
 
@@ -125,6 +133,8 @@ class Exchange:
 
         if membership:
             mouse.all_in_one(*self.back_button)
+
+        return ocr_data
 
     def abort_order(self, slot):
         """ Aborts an order in progress """

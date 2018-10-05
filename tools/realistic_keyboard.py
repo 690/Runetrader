@@ -28,7 +28,7 @@ def typeerror(type=None):
 def write(text, type=None):
     """ Writes text to highlighted window with random delays and typing errors """
 
-    time.sleep(random.uniform(*LONG_DELAY_RANGE))
+    #time.sleep(random.uniform(*LONG_DELAY_RANGE))
 
     reset = False
 

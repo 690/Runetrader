@@ -8,6 +8,10 @@ class Slot:
         self.item = item
         self.amount = amount
 
+    def set(self, i, a):
+        self.item = i
+        self.amount = a
+
 
 class Inventory:
 
@@ -28,10 +32,8 @@ class Inventory:
                 nx = (x0 + nz * y)
                 ny = (y0 + nw * x)
 
-                print(nx, ny, nz, nw)
-
-                offset = round(nw/4)
-                self.inventory_list.append(Slot((nx+offset, ny+offset, nz-offset, nw-offset), None, None))
+                crop = round(nw/3)
+                self.inventory_list.append(Slot((nx+crop, ny+crop, nz-crop, nw-crop), None, 0))
 
     def find(self, item):
         """ returns the Slot object containing the item """
@@ -54,10 +56,10 @@ class Inventory:
          if all are removed it deletes the entire entry """
 
         for slot in self.inventory_list:
-            print(slot.item.itemID)
             if slot.item.itemID == item.itemID:
+
                 if amount > slot.amount:
                     slot.item = None
-                    slot.amount = None
+                    slot.amount = 0
                 else:
                     slot.amount -= amount

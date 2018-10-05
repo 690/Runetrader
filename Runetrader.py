@@ -1,6 +1,6 @@
 from tools import builder, realistic_mouse as mouse, utils
 from classes import runescape, items
-import os, time
+import os, random
 import pyautogui
 from lib import basic_functions as ef
 
@@ -15,14 +15,11 @@ if __name__ == "__main__":
     hwnd, coordinates = runescape.find_window()
     client = runescape.RunescapeInstance(hwnd, coordinates)
 
-    coins = items.Item("Coins")
-    client.inventory.inventory_list[0].item = coins
-    dr = items.Item("Mithril bar")
-    ef.find_margin(client, dr)
 
-    """ txt_item_list = open("./data/custom/good_items.txt", 'r')
- item_list = [items.Item(item) for item in txt_item_list.readlines()[:4]]
+    input()
 
- margins = (ef.find_margin(client.exchange, item) for item in item_list)
- for margin in margins:
-     print(margin)"""
+    dr = items.Item("uncut emerald")
+    #for item in [random.choice(open("./data/custom/good_items.txt", 'r').readlines()) for x in range(1)]:
+
+    margin = ef.find_margin(client, dr)
+    print(margin)

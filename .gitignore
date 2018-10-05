@@ -7,4 +7,5 @@ classes/__pycache__
 items/
 inventory/
 /data/custom/
+/resources/testing
 test.py

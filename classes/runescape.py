@@ -6,8 +6,8 @@ import win32gui
 import json
 import config
 
-from tools import realistic_mouse as mouse, utils
-from classes import exchange
+from tools import realistic_mouse as mouse, utils, ocr
+from classes import exchange, items
 from classes.inventory import  Inventory
 
 
@@ -36,6 +36,17 @@ class RunescapeInstance:
 
             self.inventory = Inventory(utils.dynamic_coordinate_converter(self.coordinates,
                                                                           coords['inventory_window'], '+'))
+        self.inventory.inventory_list[0].set(items.Item('coins'), self.find_coins())
+
+    def find_coins(self):
+        mouse.random_move(*self.inventory.inventory_list[0].coordinates)
+        mouse.click('right')
+        time.sleep(0.5)
+        mouse.all_in_one(*pyautogui.locateOnScreen("./resources/regions/inventory/examine_coins.png"))
+        try:
+            return ocr.recognize_int(self.exchange.chat_window)
+        except IndexError as e:
+            return config.GP_CAPITAL
 
     def tab_switcher(self):
         """ Randomly switches tabs and interacts in the sidebar """
