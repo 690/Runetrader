@@ -14,6 +14,8 @@ class Inventory:
 
     def __init__(self, coordinates):
 
+        print("DEBUG: Initializing inventory")
+
         self.coordinates = coordinates
         self.inventory_list = []
 
@@ -32,7 +34,6 @@ class Inventory:
                 crop = round(nw/3)
                 self.inventory_list.append(Slot((nx+crop, ny+crop, nz-crop, nw-crop), None, 0))
 
-
     @property
     def coins(self):
         return self.inventory_list[0].amount
@@ -48,6 +49,8 @@ class Inventory:
         """ Looks for an open spot in the inventory and adds the given item,
          if item already exists, it adds the given amount """
 
+        print("DEBUG: Added {0} {1} to inventory".format(amount, item.name))
+
         for slot in self.inventory_list:
             if slot.item is None:
                 slot.item = item
@@ -56,6 +59,8 @@ class Inventory:
     def remove(self, item, amount):
         """ Removes a certain amount of a given itemID from the inventory list,
          if all are removed it deletes the entire entry """
+
+        print("DEBUG: Removed {0} {1} from inventory".format(amount, item.name))
 
         for slot in self.inventory_list:
             if slot.item.itemID == item.itemID:

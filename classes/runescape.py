@@ -16,6 +16,7 @@ def find_window(name="RuneLite"):
 
     hwnd = win32gui.FindWindow(None, name)
     coordinates = win32gui.GetWindowRect(hwnd)
+    print("DEBUG: Runescape client window, hwnd : {0}, coordinates : {1}".format(hwnd, coordinates))
     return hwnd, coordinates
 
 
@@ -23,6 +24,9 @@ class RunescapeInstance:
     """ Instance of the Runescape window """
 
     def __init__(self, hwnd, coordinates):
+
+        print("DEBUG: setting up runescape client instance")
+
         self.hwnd = hwnd
         self.coordinates = coordinates
 
@@ -37,8 +41,10 @@ class RunescapeInstance:
             self.inventory = Inventory(utils.dynamic_coordinate_converter(self.coordinates,
                                                                           coords['inventory_window'], '+'))
         self.inventory.inventory_list[0].set(items.Item('coins'), self.find_coins())
+        print("DEBUG: Coins in inventory", self.inventory.inventory_list[0].amount)
 
     def find_coins(self):
+        print("DEBUG: Finding coins in inventory spot 0")
         mouse.random_move(*self.inventory.inventory_list[0].coordinates)
         mouse.click('right')
         time.sleep(0.5)
@@ -46,6 +52,7 @@ class RunescapeInstance:
         try:
             return ocr.recognize_int(self.exchange.chat_window)
         except IndexError as e:
+            print("DEBUG: Could not find coins, returning config.GP_CAPITAL")
             return config.GP_CAPITAL
 
     def tab_switcher(self):
@@ -60,6 +67,7 @@ class RunescapeInstance:
                 break
 
         try:
+            print("DEBUG: Changing menu tab to", tab)
             x, y, z, w = pyautogui.locateOnScreen("resources/regions/sidebar/tabs/{0}".format(tab))
             mouse.all_in_one(x, y, z, w)
         except TypeError as e:

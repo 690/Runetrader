@@ -3,14 +3,19 @@ from classes import orders, items
 import datetime
 import config
 import json
+import random
 
 
 def find_items():
+    print("DEBUG: Generating random item list")
+
     data = json.load(open("./data/items.json", 'r'))
     return [items.Item(item['name']) for item in data if item['members'] == config.membership]
 
 
 def find_margin(client, item):
+
+    print("DEBUG: Finding margin for item", item.name)
 
     exchange = client.exchange
 
@@ -40,6 +45,8 @@ def find_margin(client, item):
 
 
 def place_buy_order(client, item, amount, price):
+    print("DEBUG: Placing buy order for {0} {1} at {2} gp each".format(amount, item.name, price))
+
     exchange = client.exchange
 
     slot = exchange.empty_slots[0]
@@ -70,6 +77,8 @@ def place_buy_order(client, item, amount, price):
 
 
 def place_sell_order(client, item, amount, price):
+    print("DEBUG: Placing sell order for {0} {1} at {2} gp each".format(amount, item.name, price))
+
     exchange = client.exchange
 
     slot = exchange.empty_slots[0]
@@ -78,6 +87,7 @@ def place_sell_order(client, item, amount, price):
     mouse.all_in_one(*slot.sell_button)
 
     inventory_spot = client.inventory.find(item)
+    print(inventory_spot)
     mouse.all_in_one(*inventory_spot.coordinates)
 
     if type(price) == list:

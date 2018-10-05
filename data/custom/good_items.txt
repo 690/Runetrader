@@ -1,0 +1,16 @@
+adamantite ore
+death rune
+oak logs
+uncut emerald
+yew logs
+mithril ore
+uncut ruby
+rune axe
+uncut sapphire
+rune 2h sword
+uncut diamond
+law rune
+nature rune
+adamant arrow
+mithril arrow
+rune platebody

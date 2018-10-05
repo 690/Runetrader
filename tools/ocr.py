@@ -30,11 +30,8 @@ def recognize_int(region):
     txt = pytesseract.image_to_string(image, config='--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789')
 
     txt_list = [CTN_DICT[t] if t in list(CTN_DICT.keys()) else t for t in txt]
-    print(txt_list)
     txt_list = [int(x) for x in txt_list if x.isdigit()]
-
-    image.show()
-    input()
+    #image.show()
     t = list(txt_list)[0]
     return t
 
