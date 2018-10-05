@@ -50,8 +50,8 @@ class RunescapeInstance:
         time.sleep(0.5)
         mouse.all_in_one(*pyautogui.locateOnScreen("./resources/regions/inventory/examine_coins.png"))
         try:
-            return ocr.recognize_int(self.exchange.chat_window)
-        except IndexError as e:
+            return int(ocr.recognize_int(self.exchange.newest_msg))
+        except TypeError as e:
             print("DEBUG: Could not find coins, returning config.GP_CAPITAL")
             return config.GP_CAPITAL
 

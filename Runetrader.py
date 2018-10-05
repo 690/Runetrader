@@ -1,9 +1,8 @@
 import os
-import config
 
 from lib import basic_functions as rt
 from classes import runescape
-from tools import builder
+from tools import builder, utils
 
 
 if __name__ == "__main__":
@@ -21,6 +20,7 @@ if __name__ == "__main__":
         """ Main event loop """
 
         items = rt.find_items()
+
         for item in items:
             p1, p2 = rt.find_margin(client, item)
             margin = p1 - p2
@@ -29,3 +29,5 @@ if __name__ == "__main__":
 
             if ratio not in range(1, 20):
                 continue
+
+            print(ratio)

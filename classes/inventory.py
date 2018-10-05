@@ -31,8 +31,11 @@ class Inventory:
                 nx = (x0 + nz * y)
                 ny = (y0 + nw * x)
 
-                crop = round(nw/3)
+                crop = round(nw*0.45)
                 self.inventory_list.append(Slot((nx+crop, ny+crop, nz-crop, nw-crop), None, 0))
+
+        for i in self.inventory_list:
+            print(i.coordinates)
 
     @property
     def coins(self):
@@ -40,7 +43,9 @@ class Inventory:
 
     def find(self, item):
         """ returns the Slot object containing the item """
+
         for i, j in enumerate(self.inventory_list):
+            print("DEBUG: ", self.inventory_list[i].item, type(self.inventory_list[i]))
             if self.inventory_list[i].item.itemID == item.itemID:
                 return self.inventory_list[i]
             return None
@@ -55,6 +60,8 @@ class Inventory:
             if slot.item is None:
                 slot.item = item
                 slot.amount = amount
+            elif slot.item == item:
+                slot.amount += amount
 
     def remove(self, item, amount):
         """ Removes a certain amount of a given itemID from the inventory list,

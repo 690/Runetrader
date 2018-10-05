@@ -73,6 +73,9 @@ class Exchange:
             self.quantity_info = utils.dynamic_coordinate_converter(parent_coordinates, "(276, 284, 100, 20)", '+')
             self.price_info = utils.dynamic_coordinate_converter(parent_coordinates, "(250, 300, 20, 20)", '+')
 
+            self.newest_msg = utils.dynamic_coordinate_converter(parent_coordinates, "(10, 470, 70, 16)", '+')
+
+
             self.empty_slots = self.find_empty_slots()
 
     def find_empty_slots(self):

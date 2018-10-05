@@ -14,7 +14,7 @@ def move(target_x, target_y):
     """ Move mouse according to random bezier curve
     credit : DJV : https://stackoverflow.com/a/44666798 """
 
-    print("DEBUG: Moving mouse to", target_x, target_y)
+    #print("DEBUG: Moving mouse to", target_x, target_y)
 
     current_x, current_y = pyautogui.position()
 
