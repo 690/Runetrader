@@ -11,11 +11,7 @@ pyautogui.PAUSE = 0
 
 
 def move(target_x, target_y):
-    """ Move mouse according to random bezier curve
-    credit : DJV : https://stackoverflow.com/a/44666798 """
-
-    #print("DEBUG: Moving mouse to", target_x, target_y)
-
+    """ Create a mouse curve using bezier curves """
     current_x, current_y = pyautogui.position()
 
     control_points = 3
@@ -32,17 +28,17 @@ def move(target_x, target_y):
     x += xr
     y += yr
 
-    degree = 3 if control_points > 3 else control_points - 1  # Degree of b-spline. 3 is recommended.
+    degree = 3 if control_points > 3 else control_points - 1
     tck, u = scipy.interpolate.splprep([x, y], k=degree)
     u = scipy.linspace(0, 1, num=max(pyautogui.size()))
     points = scipy.interpolate.splev(u, tck)
 
     duration = random.uniform(*SMALL_DELAY_RANGE)
-    timeout = duration / len(points[0]) * 0.15
+    timeout = duration / len(points[0])
 
     for point in zip(*(i.astype(int) for i in points)):
         pyautogui.moveTo(*point)
-        #time.sleep(timeout)
+        time.sleep(timeout)
 
 
 def click(button="left"):
@@ -53,11 +49,13 @@ def click(button="left"):
 
 
 def random_move(x, y, z, w):
+    """ Moves the mouse to a random position within a box """
     random_x, random_y = random_position(x, y, x + z, y + w)
     move(random_x, random_y)
 
 
 def all_in_one(x, y, z, w):
+    """ Easy to use move and click function """
     random_x, random_y = random_position(x, y, x + z, y + w)
     move(random_x, random_y)
     click()

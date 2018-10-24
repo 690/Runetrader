@@ -34,7 +34,7 @@ def recognize_int(region):
     txt_list = [CTN_DICT[t] if t in list(CTN_DICT.keys()) else t for t in txt]
     txt_list = [str(x) for x in txt_list if x.isdigit()]
     txt_list = ''.join(txt_list)
-    print(txt_list)
+
     return txt_list
 
 

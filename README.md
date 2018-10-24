@@ -10,10 +10,3 @@ We use both image and optical character recognition to locate and save positions
 
 The saved coordinates are all passed through a dynamic coordinate calculator, making the Runescape window position and sizing irrelevant.
 
-
-
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
- 

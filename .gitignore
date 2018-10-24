@@ -1,0 +1,7 @@
+.idea/
+__pycache__
+__pycache__/
+setup.py
+test.py
+venv
+/__pycache__

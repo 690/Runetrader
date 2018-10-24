@@ -31,6 +31,8 @@ class Exchange:
             file = open('./data/dynamic_coordinates.json', 'r')
             coordinates = json.load(file)
 
+            # TODO Change following to be a dynamically loaded dictionary instead of hard-coding it
+
             self.coordinates = utils.dynamic_coordinate_converter(self.parent_coordinates,
                                                                  coordinates['coordinates'], '+')
 

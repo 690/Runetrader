@@ -7,35 +7,7 @@ BASE_URL = "http://services.runescape.com/m=itemdb_oldschool"
 GET_ITEM_URL = "/api/catalogue/detail.json?item={0}"
 GET_CATAGORY_URL = "/api/catalogue/items.json?category=1&alpha={0}&page={0}"
 GET_HISTORIC_VALUE_URL = "/api/graph/{0}.json"
-
 from PIL import Image
-
-
-def build_item_database():
-    """ Collects json data for each item in the game, then saves it as a json file """
-    i = 0
-
-    items = []
-
-    while True:
-        try:
-            item = getitem(i)
-
-            if item:
-                items.append(item['item'])
-
-        except Exception as e:
-            break
-
-        if i % 1000 == 0:
-            print(i)
-
-        if i > 15000:
-            break
-
-        i += 1
-    with open('../data/items.json', 'w') as e:
-        json.dump(items, e)
 
 
 def build_api_call(FUNCTION_URL, itemID, **kwargs):
@@ -94,6 +66,7 @@ def getcatagory(itemID, page=1):
 
 
 def getlimit(itemID):
+    # TODO
     pass
 
 
@@ -136,7 +109,7 @@ def get_item_limit(itemID):
     """ Returns the GE buy limit for a given item, if not stored locally,
      download and append to items.json data file """
 
-    #  TODO  instead of doing a json.dump there must be a way to edit one line instead of rewriting all of it
+    #  TODO  instead of doing a json.dump edit one line instead of rewriting all of it
 
     with open('/data/items.json', 'r') as f:
         lines = json.load(f)
@@ -159,4 +132,8 @@ def create_example():
 
 
 if __name__ == "__main__":
-    get_item_image(1935)
+    """ Internal tests """
+
+    if get_item_image(1935) != "21809432458.jpg":
+        raise Exception("Online database changed")
+
